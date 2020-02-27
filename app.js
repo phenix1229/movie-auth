@@ -1,13 +1,27 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const mongoose = require('mongoose');
+const session = require('express-session');
+let MongoStore = require('connect-mongo')(session);
+const passport = require('passport');
+require('./lib/passport');
+require('dotenv').config();
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser:true,
+  useUnifiedTopology:true,
+  useCreateIndex:true
+}).then(()=>{
+  console.log('MongoDB connected');
+}).catch(err => console.log(`Mongo Error: ${err}`));
 
-var app = express();
+const moviesRouter = require('./routes/movies');
+const usersRouter = require('./routes/users');
+
+const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -19,7 +33,26 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
+app.use(session({
+  resave: true,
+  saveUninitialized: true,
+  secret: process.env.SESSION_SECRET,
+  store: new MongoStore({
+    url: process.env.MONGODB_URI,
+    autoReconnect: true,
+    cookie: {maxAge: 60000}
+  })
+}))
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use((req, res , next) => {
+  res.locals.user = req.user;
+  next();
+})
+
+app.use('/movies', moviesRouter);
 app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler

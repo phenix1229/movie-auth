@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movies</title>
+</head>
+<body>
+    <h1>Movies</h1>
+    <% if(movies){movies.forEach(movie => {%>
+        <h2><%= `${movie.title.toUpperCase()}` %></h2>
+        <p><%= `RATING: ${movie.rating.toUpperCase()}` %> </p>
+        <p><%= `SYNOPSIS: ${movie.synopsis.toUpperCase()}` %> </p>
+        <p><%= `RELEASE YEAR: ${movie.releaseYear}` %> </p>
+        <p><%= `GENRE: ${movie.genre.toUpperCase()}` %> </p>
+        <p><%= `DIRECTOR: ${movie.director.toUpperCase()}` %> </p>
+        <p><%= `BOX OFFICE: ${movie.boxOffice}` %> </p>
+        <hr>
+    <% })} %>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add A Movie</title>
+</head>
+<body>
+    <h1>Add A Movie</h1>
+    <!-- action corresponds to the route, method is post/get -->
+    <form action="/addMovie" method="POST">
+        <label for="title">Title:</label>
+        <br>
+        <input type="text" id="title" name="title" placeholder="title">
+        <br>
+        <label for="rating">Rating:</label>
+        <br>
+        <input type="text" id="rating" name="rating" placeholder="rating">
+        <br>
+        <label for="synopsis">Synopsis:</label>
+        <br>
+        <textarea name="synopsis" id="synopsis" cols="50" rows="20"></textarea>
+        <br>
+        <label for="releaseYear">Release Year:</label>
+        <br>
+        <input type="releaseYear" id="releaseYear" name="releaseYear" placeholder="release year">
+        <br>
+        <label for="genre">Genre:</label>
+        <br>
+        <input type="genre" id="genre" name="genre" placeholder="genre">
+        <br>
+        <label for="director">Director:</label>
+        <br>
+        <input type="director" id="director" name="director" placeholder="director">
+        <br>
+        <label for="boxOffice">Box Office:</label>
+        <br>
+        <input type="boxOffice" id="boxOffice" name="boxOffice" placeholder="boxOffice">
+        <br>
+        <button type="submit">Add Movie</button>
+    </form>
+</body>
+</html>

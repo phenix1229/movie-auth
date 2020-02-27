@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find A Movie</title>
+</head>
+<body>
+    <h1>Find A Movie</h1>
+    <form action="/foundMovie" method="GET">
+    <label for="title">Title:</label>
+    <br>
+    <input type="text" id="title" name="title" placeholder="title">
+    <br>
+    <button type="submit">Find Movie</button>
+    </form>
+    <% if (movie !== null) { %>
+    <hr>
+    <h2><%= movie.title.toUpperCase() %></h2>
+    <p><%= `RATING: ${movie.rating.toUpperCase()}` %> </p>
+    <p><%= `SYNOPSIS: ${movie.synopsis.toUpperCase()}` %> </p>
+    <p><%= `RELEASE YEAR: ${movie.releaseYear}` %> </p>
+    <p><%= `GENRE: ${movie.genre.toUpperCase()}` %> </p>
+    <p><%= `DIRECTOR: ${movie.director.toUpperCase()}` %> </p>
+    <p><%= `BOX OFFICE: ${movie.boxOffice}` %> </p>
+    <% } %>
+</body>
+</html>
