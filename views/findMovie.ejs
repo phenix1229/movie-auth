@@ -15,14 +15,23 @@
     <button type="submit">Find Movie</button>
     </form>
     <% if (movie !== null) { %>
-    <hr>
-    <h2><%= movie.title.toUpperCase() %></h2>
-    <p><%= `RATING: ${movie.rating.toUpperCase()}` %> </p>
-    <p><%= `SYNOPSIS: ${movie.synopsis.toUpperCase()}` %> </p>
-    <p><%= `RELEASE YEAR: ${movie.releaseYear}` %> </p>
-    <p><%= `GENRE: ${movie.genre.toUpperCase()}` %> </p>
-    <p><%= `DIRECTOR: ${movie.director.toUpperCase()}` %> </p>
-    <p><%= `BOX OFFICE: ${movie.boxOffice}` %> </p>
+        <hr>
+        <h2><%= movie.title.toUpperCase() %></h2>
+        <p><%= `RATING: ${movie.rating.toUpperCase()}` %> </p>
+        <p><%= `SYNOPSIS: ${movie.synopsis.toUpperCase()}` %> </p>
+        <p><%= `RELEASE YEAR: ${movie.releaseYear}` %> </p>
+        <p><%= `GENRE: ${movie.genre.toUpperCase()}` %> </p>
+        <p><%= `DIRECTOR: ${movie.director.toUpperCase()}` %> </p>
+        <p><%= `BOX OFFICE: ${movie.boxOffice}` %> </p>
+        <hr>
+        
+        <form action="/delete/<%= movie.title %>?_method=DELETE" method="POST">
+            <button type="submit">Delete Movie</button>
+        </form>
+        <a href="/updateMovie/<%= movie.title %>"><button type="button">Update Movie</button></a>
     <% } %>
+    <br>
+    <br>
+    <%- include('./partials/footer') %>
 </body>
 </html>

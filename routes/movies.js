@@ -1,34 +1,51 @@
 const express = require('express');
 const router = express.Router();
-const Movie = require('./movieApp/models/Movies');
+const Movie = require('./models/Movies');
 
+
+//options page
+router.get('/', (req, res) => {
+    return res.render('index');
+});
 
 //get all movies
 router.get('/movies', (req, res) => {
-    Movie.find({})
-    .then((movies) => {
-        return res.render('movies', {movies: movies})
-    })
-    .catch(err => res.status(500).json({message: 'Server error', err}));
+    if(req.isAuthenticated()){
+        Movie.find({})
+        .then((movies) => {
+            return res.render('movies', {movies: movies});
+        })
+        .catch(err => res.status(500).json({message: 'Server error', err}));
+    } else {
+        return res.render('index');
+    }
 });
 
 //render findMovie page
 router.get('/findMovie', (req, res) => {
-    return res.render('findMovie', {movie:null})
+    if(req.isAuthenticated()){
+        return res.render('findMovie', {movie:null});
+    } else {
+        return res.redirect('/');
+    }
 });
 
 //get single movie
 router.get('/foundMovie', (req, res) => {
   //find the movie we are searching for based on searchbox query in findMovie.ejs
-    Movie.findOne({title:req.query.title})
-    .then((movie) => {
-        if(movie){
-            return res.render('findMovie', {movie});
-        } else {
-            return res.status(400).json({message:'No movie found'});
-        }
-    })
-    .catch(err => res.status(500).json({message:'Server error', err}));
+    if(req.isAuthenticated()){
+        Movie.findOne({title:req.query.title})
+        .then((movie) => {
+            if(movie){
+                return res.render('findMovie', {movie});
+            } else {
+                return res.status(400).json({message:'No movie found'});
+            }
+        })
+        .catch(err => res.status(500).json({message:'Server error', err}));
+    } else {
+        return res.redirect('/');
+    }
 });
 
 //adds a movie to the database
@@ -54,7 +71,8 @@ router.post('/addMovie', (req, res) => {
         newMovie.boxOffice = req.body.boxOffice;
         newMovie.save()
         .then((title) => {
-            return res.status(200).json({message: 'Movie added', title: title});
+            return res.redirect('/success')
+            // return res.status(200).json({message: 'Movie added', title: title});
         })
         .catch(err => {
             return res.status(500).json({message: 'Movie was not added', err});
@@ -67,11 +85,15 @@ router.post('/addMovie', (req, res) => {
 
 //render the addMovie page
 router.get('/addMovie', (req, res) => {
-    return res.render('addMovie');
+    if(req.isAuthenticated()){
+        return res.render('addMovie');
+    } else {
+        return res.redirect('/');
+    }
 });
 
 //update movie
-router.put('/:title', (req, res) => {
+router.put('/update/:title', (req, res) => {
   //find movie based on parameters
     Movie.findOne({title:req.params.title})
     .then((movie) => {
@@ -84,7 +106,7 @@ router.put('/:title', (req, res) => {
             movie.director = req.body.director ? req.body.director : movie.director;
             movie.boxOffice = req.body.boxOffice ? req.body.boxOffice : movie.boxOffice;
             movie.save().then(updated => {
-                return res.status(200).json({message:'Movie updated'});
+                return res.redirect('/success');
             })
             .catch(err => res.status(500).json({message:'Movie not updated', err}));
         } else {
@@ -92,14 +114,25 @@ router.put('/:title', (req, res) => {
         }
     })
     .catch(err => res.status(500).json({message:'Server error', err}));
-    });
+});
 
-    //delete movie
-    router.delete('/:title', (req, res) => {
+router.get('/updateMovie/:title', (req, res) => {
+    if(req.isAuthenticated()){
+        return res.render('updateMovie', {title:req.params.title});
+    } else {
+        return res.redirect('/');
+    }
+})
+
+//delete movie
+router.delete('/delete/:title', (req, res) => {
     Movie.findOneAndDelete({title: req.params.title})
     .then(movie => {
         if(movie){
-            return res.status(200).json({message:'Movie deleted', movie: movie});
+            // return res.status(200).json({message:'Movie deleted'});
+            setTimeout(res.render('findMovie'), 2000);
+            return res.send('Movie deleted');
+            // res.render('findMovie');
         } else {
             return res.status(500).json({message:'No movie to delete'});
         }

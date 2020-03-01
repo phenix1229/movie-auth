@@ -4,10 +4,11 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
+const methodOverride = require('method-override');
 const session = require('express-session');
 let MongoStore = require('connect-mongo')(session);
 const passport = require('passport');
-require('./lib/passport');
+require('./lib/passport.js');
 require('dotenv').config();
 
 mongoose.connect(process.env.MONGODB_URI, {
@@ -32,6 +33,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(methodOverride('_method'));
 
 app.use(session({
   resave: true,
@@ -52,8 +54,8 @@ app.use((req, res , next) => {
   next();
 })
 
-app.use('/movies', moviesRouter);
-app.use('/users', usersRouter);
+app.use('/', moviesRouter);
+app.use('/', usersRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

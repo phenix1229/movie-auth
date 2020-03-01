@@ -3,16 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add A Movie</title>
+    <title>Update A Movie</title>
 </head>
 <body>
-    <h1>Add A Movie</h1>
+    <h1>Update A Movie</h1>
     <!-- action corresponds to the route, method is post/get -->
-    <form action="/addMovie" method="POST">
-        <label for="title">Title:</label>
-        <br>
-        <input type="text" id="title" name="title" placeholder="title">
-        <br>
+    <form action="/update/<%= title %>?_method=PUT" method="POST">
         <label for="rating">Rating:</label>
         <br>
         <input type="text" id="rating" name="rating" placeholder="rating">
@@ -37,7 +33,7 @@
         <br>
         <input type="boxOffice" id="boxOffice" name="boxOffice" placeholder="boxOffice">
         <br>
-        <button type="submit">Add Movie</button>
+        <button type="submit">Update Movie</button>
     </form>
     <br>
     <br>
